@@ -36,7 +36,7 @@ public class PlayerServiceImpl implements PlayerService
     }
 
     @Override
-    public Player updatePlayer(Player player)
+    public Player updatePlayer(String id ,Player player)
     {
         
         Player player2 = new Player();
@@ -61,9 +61,9 @@ public class PlayerServiceImpl implements PlayerService
     @Override
     public Player addPlayer(Player player)
     {    
-        Player deletedUser = playerRepo.save(player);
+        Player addedUser = playerRepo.save(player);
 
-        return deletedUser;
+        return addedUser;
         
     }
 

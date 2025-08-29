@@ -1,0 +1,27 @@
+{
+  "name": "bgmi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --watch",
+    "build": "npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BappiGorain/Battle-Ground-Mobile-India.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BappiGorain/Battle-Ground-Mobile-India/issues"
+  },
+  "homepage": "https://github.com/BappiGorain/Battle-Ground-Mobile-India#readme",
+  "description": "",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}

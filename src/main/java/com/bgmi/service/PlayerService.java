@@ -8,7 +8,7 @@ public interface PlayerService
 {
     List<Player> getAllPlayer();
     Player getSinglePlayer(String id);
-    Player updatePlayer(Player player);
+    Player updatePlayer(String id , Player player);
     void deletePlayer(String playerId);
     Player addPlayer(Player player);
 
