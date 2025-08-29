@@ -1,0 +1,70 @@
+package com.bgmi.serviceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bgmi.entities.Player;
+import com.bgmi.exceptions.ResourceNotFoundException;
+import com.bgmi.repo.PlayerRepo;
+import com.bgmi.service.PlayerService;
+
+@Service
+public class PlayerServiceImpl implements PlayerService
+{
+
+    @Autowired
+    private PlayerRepo playerRepo;
+    
+    
+    @Override
+    public List<Player> getAllPlayer()
+    {
+        List<Player> players = new ArrayList<>();
+        players = playerRepo.findAll();
+        return players;
+        
+    }
+
+    @Override
+    public Player getSinglePlayer(String id)
+    {
+        Player player = playerRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Player","id",id));
+        return  player;
+    }
+
+    @Override
+    public Player updatePlayer(Player player)
+    {
+        
+        Player player2 = new Player();
+
+        player2.setName(player.getName());
+        player2.setEmail(player.getEmail());
+        player2.setGameId(player.getGameId());
+        player2.setPhoneNumber(player.getPhoneNumber());
+        Player savedPlayer = playerRepo.save(player2);
+        
+        return savedPlayer;
+    }
+
+    @Override
+    public void deletePlayer(String playerId) {
+        
+        Player player = playerRepo.findById(playerId).orElseThrow(()->new ResourceNotFoundException("Player", "Id", playerId));
+        
+        playerRepo.delete(player);
+    }
+
+    @Override
+    public Player addPlayer(Player player)
+    {    
+        Player deletedUser = playerRepo.save(player);
+
+        return deletedUser;
+        
+    }
+
+}
