@@ -33,6 +33,13 @@
     <h2 th:text="${name}">Name</h2>
 
 
+    <!-- using fragment -->
+
+    <div style="color: red;" th:insert="~{base :: parent}">This is in hello page</div>
+
+    <div style="color: red;" th:replace="~{base :: parent}">This is in hello page</div>
+
+
     
     
 </body>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bgmi.entities.Player;
 import com.bgmi.serviceImpl.PlayerServiceImpl;
@@ -20,7 +21,7 @@ import com.bgmi.serviceImpl.PlayerServiceImpl;
 
 
 @Controller
-@RequestMapping("/player") 
+@RequestMapping("/bgmi") 
 public class PlayerController
 {
 
@@ -30,34 +31,36 @@ public class PlayerController
     Logger logger = LoggerFactory.getLogger(PlayerController.class);
 
 
-    @GetMapping("/player")
-    public String testing(@ModelAttribute Player player,Model model)
+    @GetMapping("/login")
+    public String login(Model model)
     {
-        model.addAttribute("player",new Player());
-
+        model.addAttribute("player", new Player());
         System.out.println("Player Page");
-        return "player";
+        return "login";
     }
     
     
     @PostMapping("/add")
-    public String addPlayer(@ModelAttribute Player player,Model model)
+    public String addPlayer(@ModelAttribute Player player,RedirectAttributes redirectAttributes)
     {   
-        System.out.println("Received player data:");
-        System.out.println("Name: " + player.getName());
-        System.out.println("Game ID: " + player.getGameId());
-        System.out.println("Email: " + player.getEmail());
-        System.out.println("Password: " + player.getPassword());
-        System.out.println("Phone: " + player.getPhoneNumber());
 
         Player savedPlayer = this.playerServiceImpl.addPlayer(player);
-        
 
         logger.info("New player " + savedPlayer.getName() + " has been added with ID: " + savedPlayer.getGameId());
 
-        model.addAttribute("successMessage", "Player " + savedPlayer.getName() + " added successfully with ID: " + savedPlayer.getGameId());
+        // Send player object to profile page
+        redirectAttributes.addFlashAttribute("player", savedPlayer);
 
-        return "redirect:/player/player";
+        return "redirect:/bgmi/profile";
+    }
+
+
+    @GetMapping("/profile")
+    public String profile(@ModelAttribute("player") Player player, Model model)
+    {
+        model.addAttribute("player", player);
+        System.out.println("Profile Page");        
+        return "player/profile";
     }
 
     @GetMapping("/{id}")

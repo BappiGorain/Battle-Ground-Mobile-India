@@ -176,7 +176,7 @@
             <div class="slide-right w-full lg:w-2/5 p-8 lg:p-12 bg-white/10 backdrop-blur-xl">
                 <!-- Header -->
 
-                <div th:text="${successMessage}">Message</div>
+                
                 
                 
                 <div class="text-center mb-8">
@@ -185,7 +185,7 @@
                 </div>
 
                 <!-- Login Form -->
-                <form th:action="@{/player/add}" method="post" th:object="${player}" class="space-y-6">
+                <form th:action="@{/bgmi/add}" method="post" th:object="${player}" class="space-y-6">
                     <!-- Player Name -->
                     <div class="relative group">
                         <i class="ph-user absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 text-xl z-10"></i>
