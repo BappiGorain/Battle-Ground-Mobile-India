@@ -17,7 +17,6 @@ public class PageController
     @GetMapping("/greeting")
     public String helloPage(Model model)
     {
-
         Player player = new Player();
         player.setName("Bappi");
         player.setEmail("bappi123@gmail.com");

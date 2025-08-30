@@ -33,8 +33,7 @@ public class PlayerController
     @GetMapping("/player")
     public String testing(@ModelAttribute Player player,Model model)
     {
-
-       model.addAttribute("player",new Player());
+        model.addAttribute("player",new Player());
 
         System.out.println("Player Page");
         return "player";
@@ -43,10 +42,7 @@ public class PlayerController
     
     @PostMapping("/add")
     public String addPlayer(@ModelAttribute Player player,Model model)
-    {
-
-        
-
+    {   
         System.out.println("Received player data:");
         System.out.println("Name: " + player.getName());
         System.out.println("Game ID: " + player.getGameId());
@@ -59,9 +55,9 @@ public class PlayerController
 
         logger.info("New player " + savedPlayer.getName() + " has been added with ID: " + savedPlayer.getGameId());
 
-            model.addAttribute("successMessage", "Player " + savedPlayer.getName() + " added successfully with ID: " + savedPlayer.getGameId());
+        model.addAttribute("successMessage", "Player " + savedPlayer.getName() + " added successfully with ID: " + savedPlayer.getGameId());
 
-        return "player";
+        return "redirect:/player/player";
     }
 
     @GetMapping("/{id}")
