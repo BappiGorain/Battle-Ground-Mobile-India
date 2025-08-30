@@ -11,4 +11,5 @@ public class BgmiApplication {
 		SpringApplication.run(BgmiApplication.class, args);
 	}
 
+	
 }

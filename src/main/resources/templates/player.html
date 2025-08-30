@@ -3,9 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player</title>
+    <title>Gaming Arena - Professional Login Portal</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Custom animations and effects */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.4); }
+        }
+        
+        @keyframes slideInLeft {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            0% { transform: translateX(100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        .floating { animation: float 6s ease-in-out infinite; }
+        .glow-effect { animation: glow 2s ease-in-out infinite; }
+        .slide-left { animation: slideInLeft 1s ease-out; }
+        .slide-right { animation: slideInRight 1s ease-out; }
+        
+        /* Gaming particles background */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+            border-radius: 50%;
+            animation: particleMove 10s linear infinite;
+        }
+        
+        @keyframes particleMove {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Neon text effect */
+        .neon-text {
+            text-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6;
+        }
+        
+        /* Gaming button style */
+        .gaming-btn {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+        
+        .gaming-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+        }
+        
+        .gaming-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Interactive form fields */
+        .interactive-input {
+            transition: all 0.3s ease;
+        }
+        
+        .interactive-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Cyberpunk grid overlay */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+    </style>
 </head>
-<body>
-    <h1>This is a player Page</h1>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 relative">
+    <!-- Animated particles background -->
+    <div class="particles">
+        <div class="cyber-grid"></div>
+    </div>
+
+    <!-- Main container -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div class="flex flex-col lg:flex-row w-full max-w-6xl rounded-3xl shadow-2xl overflow-hidden bg-black/20 backdrop-blur-2xl border border-purple-500/30 glow-effect my-8">
+            
+            <!-- Left Section - Hero/Branding -->
+            <div class="slide-left w-full lg:w-3/5 relative bg-gradient-to-br from-purple-600/90 via-blue-600/80 to-cyan-500/70 p-8 lg:p-12 flex flex-col justify-center items-center text-center">
+                <!-- Logo section -->
+                <div class="floating mb-8">
+                    <img th:src="@{/images/clan_logo.png}" 
+                         alt="Gaming Arena Logo" 
+                         class="w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover shadow-2xl border-4 border-white/30"/>
+                </div>
+                
+                <!-- Main heading with neon effect -->
+                <div class="space-y-6">
+                    <h1 class="text-4xl lg:text-6xl font-black text-white neon-text">
+                        GAMING <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">ARENA</span>
+                    </h1>
+                    <p class="text-xl lg:text-2xl text-white/90 font-semibold">
+                        🎮 Elite Gaming Platform
+                    </p>
+                    <p class="text-lg text-white/80 max-w-md">
+                        Join the ultimate competitive gaming experience. Connect, compete, and conquer with players worldwide.
+                    </p>
+                </div>
+                
+                <!-- Gaming illustration -->
+                <div class="mt-8 floating">
+                    <img th:src="@{/images/bgmi_logo.avif}" 
+                         alt="Gaming Illustration" 
+                         class="w-48 lg:w-64 drop-shadow-2xl opacity-90"/>
+                </div>
+                
+                <!-- Stats or features -->
+                <div class="grid grid-cols-3 gap-6 mt-8 w-full max-w-md">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-cyan-400">10M+</div>
+                        <div class="text-sm text-white/70">Players</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-400">50K+</div>
+                        <div class="text-sm text-white/70">Tournaments</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-400">99.9%</div>
+                        <div class="text-sm text-white/70">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section - Login Form -->
+            <div class="slide-right w-full lg:w-2/5 p-8 lg:p-12 bg-white/10 backdrop-blur-xl">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-2">Welcome Back</h2>
+                    <p class="text-gray-300">Enter your credentials to access your gaming profile</p>
+                </div>
+
+                <!-- Login Form -->
+                <form th:action="/player/add" method="post" th:object="${player}" class="space-y-6">
+                    <!-- Player Name -->
+                    <div class="relative group">
+                        <i class="ph-user absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 text-xl z-10"></i>
+                        <input type="text" 
+                                th:field="*{name}"
+                                 name="name"
+                               placeholder="Player Name"
+                               required
+                               class="interactive-input w-full pl-12 pr-4 py-4 rounded-2xl bg-white/10 border border-purple-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none backdrop-blur-sm"/>
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                    </div>
+
+                    <!-- Game ID -->
+                    <div class="relative group">
+                        <i class="ph-game-controller absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400 text-xl z-10"></i>
+                        <input type="text" 
+                                th:field="*{gameId}"
+                               name="gameId"
+                               placeholder="Game ID / Username"
+                               required
+                               class="interactive-input w-full pl-12 pr-4 py-4 rounded-2xl bg-white/10 border border-cyan-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none backdrop-blur-sm"/>
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="relative group">
+                        <i class="ph-envelope absolute left-4 top-1/2 -translate-y-1/2 text-blue-400 text-xl z-10"></i>
+                        <input type="email" 
+                                th:field="*{email}"
+                                name="email"
+                               placeholder="Email Address"
+                               required
+                               class="interactive-input w-full pl-12 pr-4 py-4 rounded-2xl bg-white/10 border border-blue-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none backdrop-blur-sm"/>
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="relative group">
+                        <i class="ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-red-400 text-xl z-10"></i>
+                        <input type="password" 
+                                th:field="*{password}"
+                                name="password"
+                               placeholder="Password"
+                               required
+                               class="interactive-input w-full pl-12 pr-16 py-4 rounded-2xl bg-white/10 border border-red-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:outline-none backdrop-blur-sm"/>
+                        <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300">
+                            <i class="ph-eye text-xl"></i>
+                        </button>
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="relative group">
+                        <i class="ph-phone absolute left-4 top-1/2 -translate-y-1/2 text-green-400 text-xl z-10"></i>
+                        <input type="tel" 
+                                th:field="*{phoneNumber}"
+                                name="phoneNumber"
+                               placeholder="Phone Number (Optional)"
+                               class="interactive-input w-full pl-12 pr-4 py-4 rounded-2xl bg-white/10 border border-green-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none backdrop-blur-sm"/>
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                    </div>
+
+                    
+
+                    <!-- Remember & Forgot -->
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-3 text-gray-300 cursor-pointer">
+                            <input type="checkbox" class="h-4 w-4 rounded bg-white/10 border-purple-500/50 text-purple-600 focus:ring-purple-500"/>
+                            Remember me
+                        </label>
+                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium">Forgot Password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit"
+                            class="gaming-btn w-full py-4 rounded-2xl text-white font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all duration-300">
+                        <span class="flex items-center justify-center gap-2">
+                            <i class="ph-game-controller text-xl"></i>
+                            ENTER GAMING ARENA
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Divider with glow effect -->
+                <div class="flex items-center gap-4 my-8">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+                    <span class="text-gray-400 text-sm font-medium px-4 bg-white/10 rounded-full">OR CONTINUE WITH</span>
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+                </div>
+
+                <!-- Social Gaming Logins -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button class="flex items-center justify-center gap-3 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all duration-300 hover:scale-105">
+                        <i class="ph-google-logo text-red-400 text-xl"></i>
+                        <span class="font-medium">Google</span>
+                    </button>
+                    <button class="flex items-center justify-center gap-3 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all duration-300 hover:scale-105">
+                        <i class="ph-discord-logo text-indigo-400 text-xl"></i>
+                        <span class="font-medium">Discord</span>
+                    </button>
+                </div>
+
+                <!-- Sign up link -->
+                <p class="mt-8 text-center text-gray-300">
+                    New to Gaming Arena? 
+                    <a href="#" class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 hover:from-purple-300 hover:to-cyan-300 transition-all duration-300">
+                        Create Account
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic particles script -->
+    <script>
+        // Create animated particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            document.querySelector('.particles').appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                particle.remove();
+            }, 20000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+        
+        // Initialize with some particles
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+        
+        // Add typing effect for placeholder text
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-2px) scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Add interactive button effects
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
 </body>
 </html>

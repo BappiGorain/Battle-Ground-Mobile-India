@@ -7,5 +7,33 @@
 </head>
 <body>
     <h1>This is hello Page</h1>
+
+    <h2 th:text="${name}">name</h2>
+
+    <div>
+        <input type="text" placeholder="Enter Name" th:value="${name}"/>
+    </div>
+
+    <div th:if="${player != null}">
+        <h3 th:text="${player.name}">Name</h3>
+        <h3 th:text="${player.email}">Email</h3>
+        <h3 th:text="${player.password}">Password</h3>
+        <h3 th:text="${player.phoneNumber}">Phone Number</h3>
+        <h3 th:text="${player.gameId}">Game Id</h3>
+        <h3>Game Id : <span th:text="${player.gameId}">Game Id</span></h3>
+    </div>
+
+
+    <form action="/submit-name" method="post">
+        <input type="text" name="name" placeholder="Enter Name" />
+        <button type="submit">submit</button>
+    </form>
+
+
+    <h2 th:text="${name}">Name</h2>
+
+
+    
+    
 </body>
 </html>
