@@ -11,5 +11,7 @@ public interface PlayerService
     Player updatePlayer(String id , Player player);
     void deletePlayer(String playerId);
     Player addPlayer(Player player);
+    Player getPlayerByEmail(String email);
+    Player getPlayerByPhoneNumber(String phoneNumber);
 
 }

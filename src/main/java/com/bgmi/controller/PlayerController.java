@@ -1,5 +1,7 @@
 package com.bgmi.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -75,25 +75,35 @@ public class PlayerController
 
 
     @GetMapping("/all")
-    public String getallPlayers()
+    public String getallPlayers(Model model)
     {
-
-        this.playerServiceImpl.getAllPlayer();
+        List<Player> allPlayers = this.playerServiceImpl.getAllPlayer();
+        model.addAttribute("players", allPlayers);
 
         logger.info("All players fetched");
 
-        return "player";
+        return "player/allPlayers";
     }
 
 
-    @PutMapping("/update/{id}")
-    public String updatePlayer(@RequestBody Player player,@PathVariable("id") String id)
+    @GetMapping("/edit/{id}")
+    public String updatePlayer(@PathVariable("id") String id, Model model)
     {
+        Player player = this.playerServiceImpl.getSinglePlayer(id);
+        model.addAttribute("player", player);
 
-        this.playerServiceImpl.updatePlayer(id,player);
-
-        return "player";
+        return "/bgmi/updatePlayer";
     }
+
+    @PostMapping("/update/{id}")
+    public String updatedPlayer(@ModelAttribute Player player, @PathVariable("id") String id,RedirectAttributes redirectAttributes)
+    {
+        Player updatedPlayerDeails = this.playerServiceImpl.updatePlayer(id, player);
+        logger.info("Player updated with id : " + updatedPlayerDeails.getGameId());
+
+        return "redirect:/bgmi/profile";
+    }
+    
 
 
     @DeleteMapping("/{id}")

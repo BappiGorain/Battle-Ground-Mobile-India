@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Arena - All Players</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Custom animations and effects */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.4); }
+        }
+        
+        @keyframes slideInUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .floating { animation: float 6s ease-in-out infinite; }
+        .glow-effect { animation: glow 2s ease-in-out infinite; }
+        .slide-up { animation: slideInUp 1s ease-out; }
+        .fade-in { animation: fadeIn 1s ease-out; }
+        .pulse-effect { animation: pulse 3s ease-in-out infinite; }
+        .gradient-animate { animation: gradientShift 4s ease infinite; }
+        
+        /* Gaming particles background */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+            border-radius: 50%;
+            animation: particleMove 15s linear infinite;
+        }
+        
+        @keyframes particleMove {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Neon text effect */
+        .neon-text {
+            text-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6;
+        }
+        
+        /* Player card hover effect */
+        .player-card {
+            transition: all 0.4s ease;
+            backdrop-filter: blur(20px);
+            cursor: pointer;
+        }
+        
+        .player-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Gaming button style */
+        .gaming-btn {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+        
+        .gaming-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+        }
+        
+        .gaming-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Search and filter animations */
+        .search-box {
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Cyberpunk grid overlay */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        /* Status badges */
+        .status-online {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-offline {
+            background: linear-gradient(45deg, #6b7280, #9ca3af);
+        }
+        
+        .rank-badge {
+            background: linear-gradient(45deg, #f59e0b, #fbbf24);
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 relative">
+    <!-- Animated particles background -->
+    <div class="particles">
+        <div class="cyber-grid"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="relative z-20 bg-black/30 backdrop-blur-xl border-b border-purple-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <img th:src="@{/images/clan_logo.png}" alt="Gaming Arena" class="w-8 h-8 rounded-full">
+                    <h1 class="text-xl font-bold text-white neon-text">GAMING ARENA</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a th:href="@{/bgmi/profile}" class="text-white hover:text-purple-400 transition-colors">
+                        <i class="ph-user text-xl"></i>
+                    </a>
+                    <button class="text-white hover:text-purple-400 transition-colors">
+                        <i class="ph-bell text-xl"></i>
+                    </button>
+                    <button class="text-white hover:text-purple-400 transition-colors">
+                        <i class="ph-gear text-xl"></i>
+                    </button>
+                    <a th:href="@{/bgmi/login}" class="gaming-btn px-4 py-2 rounded-lg text-white font-medium text-decoration-none">
+                        <i class="ph-sign-out text-lg mr-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header Section -->
+        <div class="slide-up mb-8">
+            <div class="text-center">
+                <h1 class="text-5xl font-black text-white neon-text mb-4">
+                    ALL <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">PLAYERS</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-6">Discover and connect with elite gamers worldwide</p>
+                
+                <!-- Stats Banner -->
+                <div class="flex justify-center gap-8 mb-8">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-cyan-400" th:text="${players.size()}">0</div>
+                        <div class="text-sm text-gray-400">Total Players</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-green-400">247</div>
+                        <div class="text-sm text-gray-400">Online Now</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-400">15</div>
+                        <div class="text-sm text-gray-400">Pro Players</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="slide-up mb-8 bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-purple-500/30" style="animation-delay: 0.2s">
+            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <!-- Search Box -->
+                <div class="relative flex-1 max-w-md">
+                    <i class="ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 text-xl"></i>
+                    <input type="text" 
+                           id="searchInput"
+                           placeholder="Search players by name or Game ID..."
+                           class="search-box w-full pl-12 pr-4 py-3 rounded-2xl bg-white/10 border border-purple-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none backdrop-blur-sm"/>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex gap-3">
+                    <button class="filter-btn gaming-btn px-4 py-2 rounded-xl text-white font-medium" data-filter="all">
+                        <i class="ph-users mr-2"></i>All
+                    </button>
+                    <button class="filter-btn bg-green-500/20 hover:bg-green-500/30 px-4 py-2 rounded-xl text-green-400 font-medium border border-green-500/30 transition-all" data-filter="online">
+                        <i class="ph-circle mr-2"></i>Online
+                    </button>
+                    <button class="filter-btn bg-yellow-500/20 hover:bg-yellow-500/30 px-4 py-2 rounded-xl text-yellow-400 font-medium border border-yellow-500/30 transition-all" data-filter="pro">
+                        <i class="ph-crown mr-2"></i>Pro
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Players Grid -->
+        <div class="slide-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style="animation-delay: 0.4s" id="playersGrid">
+            
+            <!-- Player Card Template -->
+            <div th:each="player, iterStat : ${players}" 
+                 class="player-card bg-black/20 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30 glow-effect"
+                 th:style="'animation-delay: ' + ${iterStat.index * 0.1} + 's'"
+                 th:data-name="${player.name}"
+                 th:data-gameid="${player.gameId}">
+                
+                <!-- Player Avatar and Status -->
+                <div class="relative mb-4 text-center">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 p-1">
+                        <img th:src="@{/images/default-avatar.png}" 
+                             alt="Player Avatar" 
+                             class="w-full h-full rounded-full object-cover bg-gray-800"/>
+                    </div>
+                    <!-- Online Status -->
+                    <div class="absolute -top-1 -right-1">
+                        <div class="status-online w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
+                            <div class="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+                    <!-- Rank Badge -->
+                    <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                        <span class="rank-badge px-2 py-1 rounded-full text-black font-bold text-xs">
+                            PRO
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Player Info -->
+                <div class="text-center mb-4">
+                    <h3 class="text-lg font-bold text-white mb-1" th:text="${player.name}">Player Name</h3>
+                    <p class="text-sm text-purple-400 mb-2">
+                        <i class="ph-game-controller mr-1"></i>
+                        <span th:text="${player.gameId}">GameID123</span>
+                    </p>
+                    <p class="text-xs text-gray-400" th:text="${player.email}">player@email.com</p>
+                </div>
+                
+                <!-- Player Stats -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-white/5 rounded-lg p-3 text-center">
+                        <div class="text-lg font-bold text-cyan-400">89</div>
+                        <div class="text-xs text-gray-400">Wins</div>
+                    </div>
+                    <div class="bg-white/5 rounded-lg p-3 text-center">
+                        <div class="text-lg font-bold text-yellow-400">2.8K</div>
+                        <div class="text-xs text-gray-400">Kills</div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-purple-500/20 hover:bg-purple-500/30 py-2 rounded-lg text-purple-400 font-medium text-sm transition-all border border-purple-500/30">
+                        <i class="ph-user-plus mr-1"></i>Add Friend
+                    </button>
+                    <button class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 py-2 rounded-lg text-blue-400 font-medium text-sm transition-all border border-blue-500/30"
+                            th:onclick="'viewProfile(' + ${player.id} + ')'">
+                        <i class="ph-eye mr-1"></i>View
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16" th:if="${players.isEmpty()}">
+            <div class="text-6xl mb-4">🎮</div>
+            <h3 class="text-2xl font-bold text-white mb-2">No Players Found</h3>
+            <p class="text-gray-400">Be the first to join the Gaming Arena!</p>
+            <a th:href="@{/bgmi/login}" class="gaming-btn inline-block px-6 py-3 rounded-xl text-white font-bold mt-4">
+                <i class="ph-plus mr-2"></i>Join Now
+            </a>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-12" th:if="${players.size() > 12}">
+            <button id="loadMoreBtn" class="gaming-btn px-8 py-4 rounded-2xl text-white font-bold text-lg">
+                <i class="ph-arrow-down mr-2"></i>Load More Players
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Player Details Modal -->
+    <div id="playerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-black/40 backdrop-blur-xl rounded-3xl p-8 border border-purple-500/30 max-w-md w-full">
+            <div class="text-center">
+                <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 p-1 mb-4">
+                    <img src="/images/default-avatar.png" alt="Player Avatar" class="w-full h-full rounded-full object-cover bg-gray-800"/>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2" id="modalPlayerName">Player Name</h3>
+                <p class="text-purple-400 mb-4" id="modalPlayerGameId">GameID123</p>
+                <div class="flex gap-3 justify-center">
+                    <button class="gaming-btn px-6 py-3 rounded-xl text-white font-bold">
+                        <i class="ph-chat-circle mr-2"></i>Message
+                    </button>
+                    <button class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl text-white font-bold border border-white/20 transition-all">
+                        <i class="ph-user-plus mr-2"></i>Add Friend
+                    </button>
+                </div>
+                <button class="mt-4 text-gray-400 hover:text-white transition-colors" onclick="closeModal()">
+                    <i class="ph-x text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic particles and interaction script -->
+    <script>
+        // Create animated particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            document.querySelector('.particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 25000);
+        }
+
+        setInterval(createParticle, 800);
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createParticle, i * 300);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const playerCards = document.querySelectorAll('.player-card');
+            
+            playerCards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const gameId = card.dataset.gameid.toLowerCase();
+                
+                if (name.includes(searchTerm) || gameId.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('gaming-btn'));
+                // Add active class to clicked button
+                this.classList.add('gaming-btn');
+                
+                const filterType = this.dataset.filter;
+                // Implement filter logic based on filterType
+                console.log('Filter:', filterType);
+            });
+        });
+
+        // Player card interactions
+        document.querySelectorAll('.player-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+                this.style.boxShadow = '0 25px 50px rgba(139, 92, 246, 0.4)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // View profile function
+        function viewProfile(playerId) {
+            window.location.href = `/bgmi/${playerId}`;
+        }
+
+        // Modal functions
+        function openPlayerModal(playerName, gameId) {
+            document.getElementById('modalPlayerName').textContent = playerName;
+            document.getElementById('modalPlayerGameId').textContent = gameId;
+            document.getElementById('playerModal').classList.remove('hidden');
+            document.getElementById('playerModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('playerModal').classList.add('hidden');
+            document.getElementById('playerModal').classList.remove('flex');
+        }
+
+        // Load more functionality
+        document.getElementById('loadMoreBtn')?.addEventListener('click', function() {
+            this.innerHTML = '<i class="ph-spinner mr-2"></i>Loading...';
+            this.disabled = true;
+            
+            // Simulate loading
+            setTimeout(() => {
+                this.innerHTML = '<i class="ph-arrow-down mr-2"></i>Load More Players';
+                this.disabled = false;
+            }, 2000);
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 50);
+        }
+
+        // Animate counters on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const totalPlayers = document.querySelector('.text-cyan-400');
+                if (totalPlayers) {
+                    const target = parseInt(totalPlayers.textContent);
+                    animateCounter(totalPlayers, target);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

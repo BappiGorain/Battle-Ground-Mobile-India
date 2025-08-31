@@ -25,13 +25,12 @@ public class PlayerServiceImpl implements PlayerService
         List<Player> players = new ArrayList<>();
         players = playerRepo.findAll();
         return players;
-        
     }
 
     @Override
     public Player getSinglePlayer(String id)
     {
-        Player player = playerRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Player","id",id));
+        Player player = playerRepo.findByGameId(id).orElseThrow(()->new ResourceNotFoundException("Player","id",id));
         return  player;
     }
 
@@ -45,16 +44,17 @@ public class PlayerServiceImpl implements PlayerService
         player2.setEmail(player.getEmail());
         player2.setGameId(player.getGameId());
         player2.setPhoneNumber(player.getPhoneNumber());
+        player2.setPlayerLogo(player.getPlayerLogo());
         Player savedPlayer = playerRepo.save(player2);
-        
+
         return savedPlayer;
     }
 
     @Override
-    public void deletePlayer(String playerId) {
+    public void deletePlayer(String playerId)
+    {
         
-        Player player = playerRepo.findById(playerId).orElseThrow(()->new ResourceNotFoundException("Player", "Id", playerId));
-        
+        Player player = playerRepo.findByGameId(playerId).orElseThrow(()->new ResourceNotFoundException("Player", "Id", playerId));
         playerRepo.delete(player);
     }
 
@@ -62,9 +62,21 @@ public class PlayerServiceImpl implements PlayerService
     public Player addPlayer(Player player)
     {    
         Player addedUser = playerRepo.save(player);
-
         return addedUser;
         
     }
 
+    @Override
+    public Player getPlayerByEmail(String email)
+    {
+        Player player = this.playerRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("Player", "email", email));
+        return player;
+    }
+
+    @Override
+    public Player getPlayerByPhoneNumber(String phoneNumber)
+    {
+        Player player = this.playerRepo.findByEmail(phoneNumber).orElseThrow(()->new ResourceNotFoundException("Player", "phone Number", phoneNumber));
+        return player;
+    }
 }
