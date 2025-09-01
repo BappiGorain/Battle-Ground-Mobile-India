@@ -210,6 +210,141 @@
             background-size: 200% 200%;
             animation: gradientShift 3s ease infinite;
         }
+
+
+        /* video player css */
+
+        .gaming-video-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .video-playlist {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .playlist-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .playlist-item.active {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .playlist-thumbnail {
+            width: 60px;
+            height: 40px;
+            background: #333;
+            border-radius: 5px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .playlist-info h3 {
+            color: white;
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .playlist-info p {
+            color: #ccc;
+            margin: 5px 0 0 0;
+            font-size: 12px;
+        }
+        
+        .main-player {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .player-header {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .live-indicator {
+            background: #ff4444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .video-area {
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        
+        .video-area video {
+            width: 100%;
+            height: auto;
+        }
+        
+        .placeholder {
+            color: #666;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        
+        
     </style>
 </head>
 
@@ -548,7 +683,7 @@
     </div>
 
     <!-- Weapon Stats (Only show if player exists) -->
-    <div th:if="${player}" class="slide-up bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-orange-500/30"
+    <div th:if="${player}" class="slide-up bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-orange-500/30 mb-8"
         style="animation-delay: 0.8s">
         <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
             <i class="ph-crosshair mr-3 text-orange-400"></i>
@@ -613,8 +748,161 @@
     </div>
     </div>
 
+
+    <div th:if="${player}" class="slide-up  bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-orange-500/30"
+        style="animation-delay: 0.8s">
+        <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+            <i class="ph-crosshair mr-3 text-orange-400"></i>
+            Gaming Videos
+        </h2>
+            <div class="video-grid">
+                <!-- Playlist -->
+                <div class="video-playlist">
+                    <h2 style="color: white; margin-bottom: 20px;">📋 Video Playlist</h2>
+                    
+                    <!-- Your YouTube Video -->
+                    <div class="playlist-item" onclick="playVideo('gVuIoSK30yk', 'We Don\'t Talk Anymore x Afsos', 'Gravero Mashup - A fusion you didn\'t know you needed!', this, true)">
+                        <div class="playlist-thumbnail">🎵</div>
+                        <div class="playlist-info">
+                            <h3>We Don't Talk Anymore x Afsos</h3>
+                            <p>Gravero Mashup • 3:34</p>
+                        </div>
+                    </div>
+                    
+                    <div class="playlist-item" onclick="playVideo('PJt5HnWKKt8', 'Omg!😱 EVERYONE SHOULD WATCH THIS GAMEPLAY 🥵 HARDEST GAME EVER', 'Bgmi game play', this,true)">
+                        <div class="playlist-thumbnail">🐲</div>
+                        <div class="playlist-info">
+                            <h3>Bgmi gameplay</h3>
+                            <p>Vale • 21:13</p>
+                        </div>
+                    </div>
+                    
+                    <div class="playlist-item" onclick="playVideo('IfmzoNpqH78', 'INTENSE WAR FIGHT 1VS 10', 'bgmi game Play', this,true)">
+                        <div class="playlist-thumbnail">⚡</div>
+                        <div class="playlist-info">
+                            <h3>Bgmi gameplay</h3>
+                            <p>Bappi • 10:09</p>
+                        </div>
+                    </div>
+                    
+                    <div class="playlist-item" onclick="playVideo('tutorial.mp4', 'Pro Tips & Tricks', 'Learn advanced techniques', this)">
+                        <div class="playlist-thumbnail">🎯</div>
+                        <div class="playlist-info">
+                            <h3>Pro Tips & Tricks</h3>
+                            <p>Tutorial • 15:22</p>
+                        </div>
+                    </div>
+                    
+                    <div class="playlist-item" onclick="playVideo('funny-moments.mp4', 'Funny Moments', 'Hilarious gameplay fails', this)">
+                        <div class="playlist-thumbnail">😂</div>
+                        <div class="playlist-info">
+                            <h3>Funny Moments</h3>
+                            <p>Compilation • 6:18</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Player -->
+                <div class="main-player">
+                    <div class="player-header">
+                        <div>
+                            <h2 id="videoTitle">Select a video to play</h2>
+                            <p id="videoDescription" style="margin: 5px 0 0 0; color: #ccc;"></p>
+                        </div>
+                        <div class="live-indicator" style="display: none;">🔴 LIVE</div>
+                    </div>
+                    
+                    <div class="video-area" id="videoArea">
+                        <div class="placeholder">
+                            Click on any video from the playlist to start watching! 🎬
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+    <!-- Video Player -->
+
+    
+    
+    
+    
+
     <!-- Dynamic particles script -->
     <script>
+
+
+
+
+
+        // Video Player Script
+
+        function playVideo(videoSrc, title, description, playlistItem, isYouTube = false) {
+            // Update video info
+            document.getElementById('videoTitle').textContent = title;
+            document.getElementById('videoDescription').textContent = description;
+            
+            // Remove active class from all playlist items
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            playlistItem.classList.add('active');
+            
+            // Create video player
+            const videoArea = document.getElementById('videoArea');
+            
+            if (isYouTube) {
+                // For YouTube videos
+                videoArea.innerHTML = `
+                    <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;">
+                        <iframe 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                            src="https://www.youtube.com/embed/${videoSrc}?autoplay=1&rel=0" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+            } else {
+                // For local MP4 videos
+                videoArea.innerHTML = `
+                    <video controls autoplay style="width: 100%; height: auto;">
+                        <source src="${videoSrc}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+            }
+        }
+
+
+
+
+
+
+
+
+        
         // Create animated particles
         function createParticle() {
             const particle = document.createElement('div');
