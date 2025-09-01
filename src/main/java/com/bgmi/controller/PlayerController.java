@@ -25,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bgmi.entities.Player;
 import com.bgmi.serviceImpl.PlayerServiceImpl;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/bgmi") 
@@ -74,19 +76,7 @@ public class PlayerController
 
 
 
-    @GetMapping("/{gameId}")
-    public String getSinglePlayer(@PathVariable("gameId") String gameId,Model model)
-    {
-        Player player = this.playerServiceImpl.getSinglePlayer(gameId);
-        model.addAttribute("player", player);
-
-        model.addAttribute("roomId", "123456");
-        model.addAttribute("roomPassword", "bgmi@123");
-
-        logger.info("your player is : " + player.getName());
-
-        return "player/profile";
-    }
+    
 
 
     @GetMapping("/all")
@@ -160,6 +150,46 @@ public class PlayerController
         redirectAttributes.addFlashAttribute("deleteMessage","Player with Game ID : " + gameId +" has been deleted Successfully !!");
         logger.info("Player deleted with id : " + gameId);
         return "redirect:/bgmi/all";
+    }
+
+
+    @GetMapping("/id-password")
+    public String getIdPassword()
+    {
+        return "player/idPassword";
+    }
+
+    @PostMapping("/get-id-password")
+    public String getIdPassword(@RequestParam("roomId") String roomId,
+                                @RequestParam("roomPassword") String roomPassword,
+                                HttpSession session,
+                                Model model)
+    {
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("roomPassword", roomPassword);
+
+        session.setAttribute("roomId", roomId);
+        session.setAttribute("roomPassword", roomPassword);
+        logger.info("Room ID: " + roomId + ", Room Password: " + roomPassword);
+        return "player/idPassword";
+    }
+
+
+    @GetMapping("/{gameId}")
+    public String getSinglePlayer(@PathVariable("gameId") String gameId,HttpSession session,Model model)
+    {
+        Player player = this.playerServiceImpl.getSinglePlayer(gameId);
+        model.addAttribute("player", player);
+
+        String roomId = (String)session.getAttribute("roomId");
+        String roomPassword = (String)session.getAttribute("roomPassword");
+
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("roomPassword", roomPassword);
+
+        logger.info("your player is : " + player.getName());
+
+        return "player/profile";
     }
 
 }

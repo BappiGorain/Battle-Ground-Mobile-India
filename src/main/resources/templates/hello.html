@@ -8,11 +8,11 @@
 <body>
     <h1>This is hello Page</h1>
 
-    <h2 th:text="${name}">name</h2>
+    <!-- <h2 th:text="${name}">name</h2> -->
 
-    <div>
+    <!-- <div>
         <input type="text" placeholder="Enter Name" th:value="${name}"/>
-    </div>
+    </div> -->
 
     <div th:if="${player != null}">
         <h3 th:text="${player.name}">Name</h3>
@@ -25,7 +25,7 @@
 
 
     <form action="/submit-name" method="post">
-        <input type="text" name="name" placeholder="Enter Name" />
+        <input type="text" name="animal" placeholder="Enter Animal Name" />
         <button type="submit">submit</button>
     </form>
 

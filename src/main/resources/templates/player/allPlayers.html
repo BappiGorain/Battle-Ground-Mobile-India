@@ -9,38 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/output.css}">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        /* Enhanced animations for sponsor cards */
-        .sponsor-card {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        .sponsor-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .sponsor-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .sponsor-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .sponsor-card:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        
 
         /* Floating animation for logos */
         .sponsor-card:hover .w-24 {
@@ -419,195 +388,7 @@
             <span th:text="${deleteMessage}">Delete Message</span>
         </div>
 
-        <!-- SPONSORSHIP BANNER SECTION -->
-        <div class="sponsorship-banner sponsorship-glow slide-up mb-12 p-8">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-white sponsor-text-glow mb-2">
-                    <i class="ph-crown text-yellow-400 mr-2"></i>PREMIUM SPONSORS
-                </h2>
-                <p class="text-gray-300">Powering the Ultimate Gaming Experience</p>
-            </div>
-
-
-            <div
-                class="sponsors-section py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-                <!-- Background Pattern -->
-                <div class="absolute inset-0 opacity-10">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_#3b82f6_0%,_transparent_50%)]">
-                    </div>
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_#8b5cf6_0%,_transparent_50%)]">
-                    </div>
-                </div>
-
-                <!-- Section Header -->
-                <div class="text-center mb-12 relative z-10">
-                    <h2
-                        class="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                        Our Trusted Partners
-                    </h2>
-                    <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-                        Proudly supported by industry leaders who believe in innovation and excellence
-                    </p>
-                    <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
-                </div>
-
-                <!-- Sponsors Grid -->
-                <div class="max-w-6xl mx-auto px-6">
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-
-                        <!-- Coca Cola -->
-                        <div class="sponsor-card group relative">
-                            <div
-                                class="bg-white/8 backdrop-blur-sm rounded-2xl p-8 h-full transition-all duration-500 hover:bg-white/12 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20 border border-white/10">
-                                <!-- Glow effect -->
-                                <div
-                                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl">
-                                </div>
-
-                                <div class="relative z-10 flex flex-col items-center text-center h-full">
-                                    <!-- Logo Container -->
-                                    <div
-                                        class="w-24 h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:shadow-red-500/40 transition-all duration-500 group-hover:rotate-3">
-                                        <img th:src="@{/images/coca-cola.jpg}" alt="Coca Cola"
-                                            class="w-12 h-12 object-contain" />
-                                    </div>
-
-                                    <!-- Company Info -->
-                                    <h3
-                                        class="text-white font-bold text-xl mb-2 group-hover:text-red-300 transition-colors">
-                                        Coca
-                                        Cola</h3>
-                                    <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">Beverage
-                                        Partner</span>
-
-                                    <!-- Partnership Level -->
-                                    <div class="mt-4 px-3 py-1 bg-red-500/20 rounded-full">
-                                        <span class="text-red-300 text-xs font-semibold">Premium Partner</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ASUS -->
-                        <div class="sponsor-card group relative">
-                            <div
-                                class="bg-white/8 backdrop-blur-sm rounded-2xl p-8 h-full transition-all duration-500 hover:bg-white/12 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 border border-white/10">
-                                <!-- Glow effect -->
-                                <div
-                                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl">
-                                </div>
-
-                                <div class="relative z-10 flex flex-col items-center text-center h-full">
-                                    <!-- Logo Container -->
-                                    <div
-                                        class="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:shadow-blue-500/40 transition-all duration-500 group-hover:rotate-3">
-                                        <img th:src="@{/images/asus-laptop.webp}" alt="ASUS"
-                                            class="w-12 h-12 object-contain" />
-                                    </div>
-
-                                    <!-- Company Info -->
-                                    <h3
-                                        class="text-white font-bold text-xl mb-2 group-hover:text-blue-300 transition-colors">
-                                        ASUS
-                                    </h3>
-                                    <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">Gaming
-                                        Technology</span>
-
-                                    <!-- Partnership Level -->
-                                    <div class="mt-4 px-3 py-1 bg-blue-500/20 rounded-full">
-                                        <span class="text-blue-300 text-xs font-semibold">Tech Partner</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Boat -->
-                        <div class="sponsor-card group relative">
-                            <div
-                                class="bg-white/8 backdrop-blur-sm rounded-2xl p-8 h-full transition-all duration-500 hover:bg-white/12 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 border border-white/10">
-                                <!-- Glow effect -->
-                                <div
-                                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl">
-                                </div>
-
-                                <div class="relative z-10 flex flex-col items-center text-center h-full">
-                                    <!-- Logo Container -->
-                                    <div
-                                        class="w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:shadow-green-500/40 transition-all duration-500 group-hover:rotate-3">
-                                        <img th:src="@{/images/boat-logo1.jpg}" alt="Boat"
-                                            class="w-12 h-12 object-contain" />
-                                    </div>
-
-                                    <!-- Company Info -->
-                                    <h3
-                                        class="text-white font-bold text-xl mb-2 group-hover:text-green-300 transition-colors">
-                                        boAt
-                                    </h3>
-                                    <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">Audio
-                                        Solutions</span>
-
-                                    <!-- Partnership Level -->
-                                    <div class="mt-4 px-3 py-1 bg-green-500/20 rounded-full">
-                                        <span class="text-green-300 text-xs font-semibold">Audio Partner</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Samsung -->
-                        <div class="sponsor-card group relative">
-                            <div
-                                class="bg-white/8 backdrop-blur-sm rounded-2xl p-8 h-full transition-all duration-500 hover:bg-white/12 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 border border-white/10">
-                                <!-- Glow effect -->
-                                <div
-                                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl">
-                                </div>
-
-                                <div class="relative z-10 flex flex-col items-center text-center h-full">
-                                    <!-- Logo Container -->
-                                    <div
-                                        class="w-24 h-24 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:shadow-purple-500/40 transition-all duration-500 group-hover:rotate-3">
-                                        <img th:src="@{/images/samsung-galaxy-s25-ultra.avif}" alt="Samsung"
-                                            class="w-12 h-12 object-contain" />
-                                    </div>
-
-                                    <!-- Company Info -->
-                                    <h3
-                                        class="text-white font-bold text-xl mb-2 group-hover:text-purple-300 transition-colors">
-                                        SAMSUNG</h3>
-                                    <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">Display
-                                        Technology</span>
-
-                                    <!-- Partnership Level -->
-                                    <div class="mt-4 px-3 py-1 bg-purple-500/20 rounded-full">
-                                        <span class="text-purple-300 text-xs font-semibold">Innovation Partner</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Call to Action for Potential Sponsors -->
-                <div class="text-center mt-16 relative z-10">
-                    <div class="max-w-4xl mx-auto px-6">
-                        <div
-                            class="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-                            <h3 class="text-2xl font-bold text-white mb-4">Join Our Partnership Program</h3>
-                            <p class="text-gray-300 mb-6">Partner with us to reach thousands of engaged users and
-                                showcase your
-                                brand to our growing community</p>
-                            <button
-                                class="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 px-6 py-3 rounded-xl text-black font-bold transition-all transform hover:scale-105">
-                                <i class="ph-handshake mr-2"></i>Become a Sponsor
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
+        
 
         <!-- Header Section -->
         <div class="slide-up mb-8">
@@ -792,6 +573,13 @@
             </div>
         </div>
     </div>
+
+
+
+    <!-- Place for sending Room Id and Password to the players -->
+
+
+    
 
     
     

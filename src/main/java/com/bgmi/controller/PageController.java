@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.bgmi.entities.Player;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -32,12 +31,12 @@ public class PageController
 
 
     @PostMapping("/submit-name")
-    public String getName(@RequestParam String name, Model model)
+    public String getName(@RequestParam String animal, Model model)
     {
 
-        model.addAttribute("name", name);
+        model.addAttribute("name", animal);
 
-        System.out.println("name " + name);
+        System.out.println("name " + animal);
         
         return "hello";
     }
