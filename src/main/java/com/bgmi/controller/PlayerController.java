@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bgmi.entities.Player;
 import com.bgmi.serviceImpl.PlayerServiceImpl;
-
 
 
 @Controller
@@ -81,6 +79,9 @@ public class PlayerController
     {
         Player player = this.playerServiceImpl.getSinglePlayer(gameId);
         model.addAttribute("player", player);
+
+        model.addAttribute("roomId", "123456");
+        model.addAttribute("roomPassword", "bgmi@123");
 
         logger.info("your player is : " + player.getName());
 
