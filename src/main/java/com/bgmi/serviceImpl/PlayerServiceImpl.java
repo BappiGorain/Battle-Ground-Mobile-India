@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.bgmi.entities.Player;
 import com.bgmi.exceptions.ResourceNotFoundException;
 import com.bgmi.repo.PlayerRepo;
@@ -28,27 +27,30 @@ public class PlayerServiceImpl implements PlayerService
     }
 
     @Override
-    public Player getSinglePlayer(String id)
+    public Player getSinglePlayer(String gameId)
     {
-        Player player = playerRepo.findByGameId(id).orElseThrow(()->new ResourceNotFoundException("Player","id",id));
+        Player player = playerRepo.findByGameId(gameId).orElseThrow(()->new ResourceNotFoundException("Player","id",gameId));
         return  player;
     }
 
     @Override
-    public Player updatePlayer(String id ,Player player)
-    {
-        
-        Player player2 = new Player();
+    public Player updatePlayer(String gameId, Player player) {
+        Player existingPlayer = playerRepo.findByGameId(gameId)
+                .orElseThrow(() -> new ResourceNotFoundException("Player", "gameId", gameId));
 
-        player2.setName(player.getName());
-        player2.setEmail(player.getEmail());
-        player2.setGameId(player.getGameId());
-        player2.setPhoneNumber(player.getPhoneNumber());
-        player2.setPlayerLogo(player.getPlayerLogo());
-        Player savedPlayer = playerRepo.save(player2);
+        // Update fields
+        existingPlayer.setName(player.getName());
+        existingPlayer.setEmail(player.getEmail());
+        existingPlayer.setPhoneNumber(player.getPhoneNumber());
 
-        return savedPlayer;
+        // Only update photo path if it's provided
+        if (player.getPhotoPath() != null && !player.getPhotoPath().isEmpty()) {
+            existingPlayer.setPhotoPath(player.getPhotoPath());
+        }
+
+        return playerRepo.save(existingPlayer);
     }
+
 
     @Override
     public void deletePlayer(String playerId)
@@ -65,6 +67,8 @@ public class PlayerServiceImpl implements PlayerService
         return addedUser;
         
     }
+
+    
 
     @Override
     public Player getPlayerByEmail(String email)

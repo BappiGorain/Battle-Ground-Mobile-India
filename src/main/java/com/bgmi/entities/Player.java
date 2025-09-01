@@ -27,7 +27,7 @@ public class Player
     private String email;
     private String password;
     private String phoneNumber;
-    private String playerLogo = "defaultLogo.png";
+    private String photoPath = "default_bgmi_avatar.png";
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
 }

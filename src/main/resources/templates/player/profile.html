@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -163,15 +163,18 @@
                     <h1 class="text-xl font-bold text-white neon-text">GAMING ARENA</h1>
                 </div>
                 <div class="flex items-center gap-4">
+                    <a th:href="@{/bgmi/players}" class="text-white hover:text-purple-400 transition-colors">
+                        <i class="ph-users text-xl"></i>
+                    </a>
                     <button class="text-white hover:text-purple-400 transition-colors">
                         <i class="ph-bell text-xl"></i>
                     </button>
                     <button class="text-white hover:text-purple-400 transition-colors">
                         <i class="ph-gear text-xl"></i>
                     </button>
-                    <button class="gaming-btn px-4 py-2 rounded-lg text-white font-medium">
+                    <a th:href="@{/bgmi/login}" class="gaming-btn px-4 py-2 rounded-lg text-white font-medium text-decoration-none">
                         <i class="ph-sign-out text-lg mr-2"></i>Logout
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -180,16 +183,27 @@
     <!-- Main Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="slide-up mb-6 bg-green-500/20 border border-green-500/30 rounded-2xl p-4 text-green-400 text-center">
+            <i class="ph-check-circle text-2xl mr-2"></i>
+            <span th:text="${successMessage}">Success message</span>
+        </div>
+
+        <div th:if="${errorMessage}" class="slide-up mb-6 bg-red-500/20 border border-red-500/30 rounded-2xl p-4 text-red-400 text-center">
+            <i class="ph-warning-circle text-2xl mr-2"></i>
+            <span th:text="${errorMessage}">Error message</span>
+        </div>
+        
         <!-- Profile Header Section -->
         <div class="slide-up mb-8">
-            <div class="profile-card bg-black/20 rounded-3xl p-8 border border-purple-500/30 glow-effect">
+            <div th:if="${player}" class="profile-card bg-black/20 rounded-3xl p-8 border border-purple-500/30 glow-effect">
                 <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
                     
                     <!-- Profile Avatar -->
                     <div class="relative floating">
                         <div class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 p-1">
-                            <img th:src="@{/images/default_bgmi_avatar.jpeg}" 
-                                 alt="Player Avatar" 
+                            <img th:src="${player.photoPath != null and !player.photoPath.isEmpty() and !player.photoPath.equals('default_bgmi_avatar.png')} ? @{${player.photoPath}} : @{/images/default_bgmi_avatar.jpeg}" 
+                                 alt="Player Avatar"
                                  class="w-full h-full rounded-full object-cover bg-gray-800"/>
                         </div>
                         <div class="absolute -bottom-2 -right-2">
@@ -210,6 +224,10 @@
                             <i class="ph-envelope mr-2"></i>
                             <span th:text="${player.email}">player@email.com</span>
                         </p>
+                        <p class="text-gray-300 mb-4" th:if="${player.phoneNumber != null and !player.phoneNumber.isEmpty()}">
+                            <i class="ph-phone mr-2"></i>
+                            <span th:text="${player.phoneNumber}">Phone Number</span>
+                        </p>
                         <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
                             <span class="achievement-badge px-3 py-1 rounded-full text-black font-bold text-sm">
                                 🏆 Champion
@@ -225,19 +243,29 @@
                     
                     <!-- Action Buttons -->
                     <div class="flex flex-col gap-3">
-                        <button class="gaming-btn px-6 py-3 rounded-xl text-white font-bold">
+                        <a th:href="@{/bgmi/update/{gameId}(gameId=${player.gameId})}" class="gaming-btn px-6 py-3 rounded-xl text-white font-bold text-center text-decoration-none">
                             <i class="ph-pencil-simple mr-2"></i>Edit Profile
-                        </button>
+                        </a>
                         <button class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl text-white font-bold border border-white/20 transition-all">
                             <i class="ph-share mr-2"></i>Share Profile
                         </button>
                     </div>
                 </div>
             </div>
+            
+            <!-- No Player Found Message -->
+            <div th:unless="${player}" class="profile-card bg-black/20 rounded-3xl p-8 border border-red-500/30 text-center">
+                <i class="ph-user-x text-6xl text-red-400 mb-4"></i>
+                <h2 class="text-2xl font-bold text-white mb-2">Player Not Found</h2>
+                <p class="text-gray-300 mb-4">The requested player could not be found.</p>
+                <a th:href="@{/bgmi/players}" class="gaming-btn px-6 py-3 rounded-xl text-white font-bold text-decoration-none">
+                    <i class="ph-users mr-2"></i>View All Players
+                </a>
+            </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="slide-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" style="animation-delay: 0.2s">
+        <!-- Stats Grid (Only show if player exists) -->
+        <div th:if="${player}" class="slide-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" style="animation-delay: 0.2s">
             <div class="stat-card bg-black/20 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30 text-center">
                 <div class="text-3xl font-bold text-cyan-400 mb-2">247</div>
                 <div class="text-gray-300">Matches Played</div>
@@ -263,8 +291,8 @@
             </div>
         </div>
 
-        <!-- Recent Activity and Achievements -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Recent Activity and Achievements (Only show if player exists) -->
+        <div th:if="${player}" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             
             <!-- Recent Matches -->
             <div class="slide-up bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-purple-500/30" style="animation-delay: 0.4s">
@@ -358,8 +386,8 @@
             </div>
         </div>
 
-        <!-- Weapon Stats -->
-        <div class="slide-up bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-orange-500/30" style="animation-delay: 0.8s">
+        <!-- Weapon Stats (Only show if player exists) -->
+        <div th:if="${player}" class="slide-up bg-black/20 backdrop-blur-xl rounded-3xl p-6 border border-orange-500/30" style="animation-delay: 0.8s">
             <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                 <i class="ph-crosshair mr-3 text-orange-400"></i>
                 Weapon Mastery
