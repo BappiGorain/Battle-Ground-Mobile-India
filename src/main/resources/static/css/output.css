@@ -1141,6 +1141,10 @@ video {
   background-color: rgb(234 179 8 / 0.2);
 }
 
+.bg-orange-500\/20 {
+  background-color: rgb(249 115 22 / 0.2);
+}
+
 .bg-gradient-to-br {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
 }
@@ -1643,6 +1647,10 @@ video {
 
 .hover\:bg-yellow-500\/30:hover {
   background-color: rgb(234 179 8 / 0.3);
+}
+
+.hover\:bg-red-500\/30:hover {
+  background-color: rgb(239 68 68 / 0.3);
 }
 
 .hover\:from-purple-300:hover {

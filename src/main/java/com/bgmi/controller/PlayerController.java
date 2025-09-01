@@ -152,12 +152,13 @@ public class PlayerController
     }
 
 
-    @DeleteMapping("/{id}")
-    public String deletePlayer(@PathVariable("id") String id)
+    @PostMapping("/delete/{gameId}")
+    public String deletePlayer(@PathVariable("gameId") String gameId,RedirectAttributes redirectAttributes)
     {
-        this.playerServiceImpl.deletePlayer(id);
-        logger.info("Player deleted with id : " + id);
-        return "player";
+        this.playerServiceImpl.deletePlayer(gameId);
+        redirectAttributes.addFlashAttribute("deleteMessage","Player with Game ID : " + gameId +" has been deleted Successfully !!");
+        logger.info("Player deleted with id : " + gameId);
+        return "redirect:/bgmi/all";
     }
 
 }

@@ -169,10 +169,11 @@
     <div class="particles">
         <div class="cyber-grid"></div>
     </div>
+    
 
     <!-- Navigation Bar -->
     <nav class="relative z-20 bg-black/30 backdrop-blur-xl border-b border-purple-500/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" th:object="${player}">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
                     <img th:src="@{/images/clan_logo.png}" alt="Gaming Arena" class="w-8 h-8 rounded-full">
@@ -228,12 +229,15 @@
                                 <i class="ph-camera mr-3 text-purple-400"></i>
                                 Profile Photo
                             </h2>
+
+
+                            <!-- <img th:src="${player.photoPath != null and !player.photoPath.isEmpty() and !player.photoPath.equals('default_bgmi_avatar.png')} ? @{${player.photoPath}} : @{/images/default_bgmi_avatar.jpeg}" alt="Gaming Arena" class="w-8 h-8 rounded-full"> -->
                             
                             <!-- Current Avatar Preview -->
                             <div class="text-center mb-6">
                                 <div class="avatar-preview w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 p-1 floating">
                                     <img id="avatarPreview" 
-                                         th:src="@{/images/clan_logo.png}" 
+                                         th:src="${player.photoPath != null and !player.photoPath.isEmpty() and !player.photoPath.equals('default_bgmi_avatar.png')} ? @{${player.photoPath}} : @{/images/default_bgmi_avatar.jpeg}"
                                          alt="Profile Avatar" 
                                          class="w-full h-full rounded-full object-cover bg-gray-800"/>
                                 </div>
@@ -278,17 +282,6 @@
                                        th:field="*{name}"
                                        required
                                        class="interactive-input w-full px-4 py-4 rounded-2xl bg-white/10 border border-purple-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none backdrop-blur-sm"/>
-                            </div>
-
-                            <!-- Game ID -->
-                            <div class="relative group">
-                                <label class="block text-sm font-medium text-gray-300 mb-2">
-                                    <i class="ph-game-controller mr-1"></i>Game ID
-                                </label>
-                                <input type="text" 
-                                       th:field="*{gameId}"
-                                       required
-                                       class="interactive-input w-full px-4 py-4 rounded-2xl bg-white/10 border border-cyan-500/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none backdrop-blur-sm"/>
                             </div>
 
                             <!-- Email -->
