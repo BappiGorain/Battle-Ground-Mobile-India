@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -26,6 +27,7 @@ import com.bgmi.entities.Player;
 import com.bgmi.serviceImpl.PlayerServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -44,19 +46,25 @@ public class PlayerController
     }
 
 
-    @GetMapping("/login")
-    public String login(Model model)
+    @GetMapping("/register")
+    public String register(Model model)
     {
         model.addAttribute("player", new Player());
-        System.out.println("Player Page");
-        return "login";
+        System.out.println("Register page loaded");
+        return "register";
     }
     
     
     @PostMapping("/add")
-    public String addPlayer(@ModelAttribute Player player,RedirectAttributes redirectAttributes)
+    public String addPlayer(@Valid @ModelAttribute Player player,BindingResult bindingResult,RedirectAttributes redirectAttributes)
     {   
 
+        if(bindingResult.hasErrors())
+        {
+            return "register";
+        }
+        
+        
         Player savedPlayer = this.playerServiceImpl.addPlayer(player);
 
         logger.info("New player " + savedPlayer.getName() + " has been added with ID: " + savedPlayer.getGameId());
@@ -66,6 +74,17 @@ public class PlayerController
 
         return "redirect:/bgmi/player/profile/"+ savedPlayer.getGameId();
     }
+
+
+    // Login
+
+    @GetMapping("/login")
+    public String login()
+    {
+        return "login";
+    }   
+    
+    
 
     @GetMapping("/player/profile/{gameId}")
     public String showProfile(@PathVariable String gameId, Model model) {
@@ -163,7 +182,7 @@ public class PlayerController
     public String getIdPassword(@RequestParam("roomId") String roomId,
                                 @RequestParam("roomPassword") String roomPassword,
                                 HttpSession session,
-                                Model model)
+                                Model model,RedirectAttributes redirectAttributes)
     {
         model.addAttribute("roomId", roomId);
         model.addAttribute("roomPassword", roomPassword);
@@ -171,6 +190,7 @@ public class PlayerController
         session.setAttribute("roomId", roomId);
         session.setAttribute("roomPassword", roomPassword);
         logger.info("Room ID: " + roomId + ", Room Password: " + roomPassword);
+        // redirectAttributes.addFlashAttribute("successMessage", "Room ID and Password Sent successfully!");
         return "player/idPassword";
     }
 
@@ -191,5 +211,12 @@ public class PlayerController
 
         return "player/profile";
     }
+
+    @GetMapping("/events")
+    public String upCommingEventsString() {
+        System.out.println("Events page loaded");
+        return "events";
+    }
+    
 
 }

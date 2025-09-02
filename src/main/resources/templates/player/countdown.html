@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room ID Countdown Timer</title>
+    <link href="https://unpkg.com/phosphor-icons@1.4.3/src/css/phosphor.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .countdown-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: float 15s infinite linear;
+            opacity: 0.3;
+        }
+
+        .countdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timer-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .timer-icon i {
+            font-size: 28px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .countdown-header h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .time-unit:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .time-value {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd93d 0%, #ffad33 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(255, 217, 61, 0.3);
+            min-width: 80px;
+            display: inline-block;
+            animation: countdownPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes countdownPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .time-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .time-separator {
+            font-size: 36px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            animation: blink 2s infinite;
+            margin: 0 10px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .countdown-progress {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .countdown-status {
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .status-text {
+            font-size: 16px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 25px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+        }
+
+        /* Warning state when time is low */
+        .countdown-container.warning {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            animation: warningPulse 2s infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4); }
+        }
+
+        .warning .timer-icon {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .warning .progress-bar {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .warning .status-text {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            animation: textBlink 1s infinite;
+        }
+
+        @keyframes textBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.7; }
+        }
+
+        /* Success state */
+        .countdown-container.success {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.4);
+        }
+
+        .success .timer-icon {
+            background: linear-gradient(135deg, #00ff88 0%, #00d96a 100%);
+        }
+
+        .success .progress-bar {
+            background: linear-gradient(90deg, #00ff88 0%, #00d96a 100%);
+        }
+
+        .additional-info {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .additional-info h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .additional-info p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .countdown-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .time-value {
+                font-size: 36px;
+                min-width: 60px;
+            }
+            
+            .countdown-header h3 {
+                font-size: 20px;
+            }
+            
+            .time-unit {
+                margin: 0 8px;
+                padding: 15px 10px;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .time-separator {
+                font-size: 28px;
+                margin: 0 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown-display {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .time-separator {
+                display: none;
+            }
+            
+            .time-unit {
+                margin: 0;
+                width: 100px;
+            }
+            
+            .time-value {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="page-header">
+            <h1>🎮 Gaming Room Manager</h1>
+            <p>Automatic Room ID Generation System</p>
+        </div>
+
+        <div class="countdown-container" id="countdownContainer">
+            <div class="countdown-header">
+                <div class="timer-icon">
+                    <i class="ph-timer"></i>
+                </div>
+                <h3>Next Room ID Generation</h3>
+            </div>
+            
+            <div class="countdown-display">
+                <div class="time-unit">
+                    <span class="time-value" id="hours">00</span>
+                    <span class="time-label">Hours</span>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <span class="time-value" id="minutes">00</span>
+                    <span class="time-label">Minutes</span>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <span class="time-value" id="seconds">00</span>
+                    <span class="time-label">Seconds</span>
+                </div>
+            </div>
+            
+            <div class="countdown-progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="countdown-status">
+                <span class="status-text" id="statusText">Room ID will be refreshed automatically</span>
+            </div>
+
+            <div class="additional-info">
+                <h4>🔒 Current Room Status</h4>
+                <p>All players will receive the new Room ID and Password automatically when the countdown reaches zero. Stay connected for seamless gaming experience!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CountdownTimer {
+            constructor(durationInMinutes = 30) {
+                this.targetTime = Date.now() + (durationInMinutes * 60 * 1000);
+                this.hoursEl = document.getElementById('hours');
+                this.minutesEl = document.getElementById('minutes');
+                this.secondsEl = document.getElementById('seconds');
+                this.progressBar = document.getElementById('progressBar');
+                this.statusText = document.getElementById('statusText');
+                this.container = document.getElementById('countdownContainer');
+                
+                this.totalDuration = durationInMinutes * 60 * 1000;
+                this.start();
+            }
+            
+            start() {
+                this.updateTimer();
+                this.interval = setInterval(() => {
+                    this.updateTimer();
+                }, 1000);
+            }
+            
+            updateTimer() {
+                const now = Date.now();
+                const timeLeft = this.targetTime - now;
+                
+                if (timeLeft <= 0) {
+                    this.onTimeUp();
+                    return;
+                }
+                
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                this.hoursEl.textContent = this.formatTime(hours);
+                this.minutesEl.textContent = this.formatTime(minutes);
+                this.secondsEl.textContent = this.formatTime(seconds);
+                
+                // Update progress bar
+                const progressPercentage = ((this.totalDuration - timeLeft) / this.totalDuration) * 100;
+                this.progressBar.style.width = progressPercentage + '%';
+                
+                // Warning state when less than 5 minutes
+                if (timeLeft <= 5 * 60 * 1000 && !this.container.classList.contains('warning')) {
+                    this.container.classList.add('warning');
+                    this.statusText.textContent = '⚠️ Room ID expiring soon!';
+                }
+                
+                // Critical state when less than 1 minute
+                if (timeLeft <= 60 * 1000) {
+                    this.statusText.textContent = '🔄 Preparing new Room ID...';
+                }
+            }
+            
+            formatTime(time) {
+                return time.toString().padStart(2, '0');
+            }
+            
+            onTimeUp() {
+                clearInterval(this.interval);
+                this.hoursEl.textContent = '00';
+                this.minutesEl.textContent = '00';
+                this.secondsEl.textContent = '00';
+                this.progressBar.style.width = '100%';
+                this.container.classList.remove('warning');
+                this.container.classList.add('success');
+                this.statusText.textContent = '✨ Generating new Room ID...';
+                
+                // Simulate room ID generation
+                setTimeout(() => {
+                    this.generateNewRoomId();
+                }, 3000);
+            }
+            
+            generateNewRoomId() {
+                // Generate random room ID for demo
+                const newRoomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+                const newPassword = Math.random().toString(36).substring(2, 10);
+                
+                this.statusText.textContent = `✅ New Room ID: ${newRoomId} | Password: ${newPassword}`;
+                
+                // Reset timer for next cycle
+                setTimeout(() => {
+                    this.resetTimer(30); // Reset to 30 minutes
+                }, 5000);
+            }
+            
+            resetTimer(durationInMinutes) {
+                this.container.classList.remove('warning', 'success');
+                this.targetTime = Date.now() + (durationInMinutes * 60 * 1000);
+                this.totalDuration = durationInMinutes * 60 * 1000;
+                this.statusText.textContent = 'Room ID will be refreshed automatically';
+                this.start();
+            }
+        }
+
+        // Initialize countdown timer when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with 30 minutes countdown
+            new CountdownTimer(30);
+            
+            console.log('🎮 Room ID Countdown Timer initialized!');
+        });
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const timeUnits = document.querySelectorAll('.time-unit');
+            
+            timeUnits.forEach(unit => {
+                unit.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.05)';
+                });
+                
+                unit.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BGMI — Upcoming Events</title>
+  <meta name="color-scheme" content="dark"/>
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#0f1b33;
+      --panel:#0e1628; --panel-2:#0b1324;
+      --border:#263c66;
+      --blue:#3b82f6; --blue2:#60a5fa; --violet:#8b5cf6;
+      --text:#eaf0f8; --muted:#a9b6cc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font:500 15.5px/1.55 Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+      min-height:100vh;
+      display:flex; flex-direction:column;
+    }
+
+    /* Header */
+    .header{ background:linear-gradient(180deg, rgba(11,18,32,.95), rgba(11,18,32,.75)); border-bottom:1px solid var(--border) }
+    .container{ width:min(1200px, 92vw); margin:0 auto }
+    .topbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 0 }
+    .brand{ display:flex; align-items:center; gap:10px }
+    .logo{ width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:linear-gradient(135deg,#3b82f6,#8b5cf6); color:#071223; font-weight:900; }
+    .title{ font-weight:800; font-size:18px }
+    .nav a{ color:#cfe0ff; text-decoration:none; margin-left:12px; font-weight:600; font-size:14px; opacity:.9 }
+    .nav a:hover{ opacity:1 }
+
+    /* Grid */
+    .grid{ display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); padding: 28px 0 32px }
+    .card{
+      display:flex; flex-direction:column;
+      background: linear-gradient(180deg,var(--panel) 0%, var(--panel-2) 100%);
+      border:1px solid var(--border); border-radius:14px; overflow:hidden;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card:hover{ transform: translateY(-2px); border-color:#3b82f6; box-shadow: 0 18px 36px rgba(0,0,0,.5) }
+
+    .media{ width:100%; height:180px; background:#0a1322; overflow:hidden }
+    .media img{ width:100%; height:100%; object-fit:cover; display:block }
+
+    .body{ flex:1; padding:14px; display:flex; flex-direction:column; gap:10px }
+    .row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+    .pill{ font-size:11.5px; font-weight:800; letter-spacing:.3px; padding:5px 8px; border-radius:999px; border:1px solid #29466f; color:#cfe0ff; background:#0a1323 }
+    .name{ font-weight:800; font-size:16px }
+    .meta{ color:#a7b5cc; font-size:12.5px; display:flex; gap:12px; flex-wrap:wrap }
+    .desc{ color:#cfe0ff; opacity:.92; font-size:13px; margin-top:2px; line-height:1.5 }
+
+    .cta{ display:flex; gap:8px; margin-top:auto; flex-wrap:wrap }
+    .btn{
+      --g1:#3b82f6; --g2:#60a5fa;
+      border:none; cursor:pointer;
+      padding:10px 12px; border-radius:10px; font-weight:800; letter-spacing:.3px; font-size:13.5px;
+      color:#071323; background: linear-gradient(135deg, var(--g1), var(--g2));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 20px rgba(59,130,246,.28);
+    }
+    .ghost{ background:#0a1322; color:#dce8ff; border:1px solid #314b78; box-shadow:none }
+
+    .footer{ border-top:1px solid var(--border); color:#a9b6cc; font-size:12.5px; padding:14px 0; text-align:center; margin-top:auto }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo">BG</div>
+          <div class="title">BGMI — Upcoming Events</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Events -->
+  <main class="container">
+    <section class="grid">
+      <!-- Event Card 1 -->
+      <article class="card">
+        <div class="media">
+          <img th:src="@{/images/events/bgmi-grand-finals.webp}" alt="Event">
+        </div>
+        <div class="body">
+          <div class="row">
+            <span class="pill">TOURNAMENT</span>
+            <span class="pill">India</span>
+          </div>
+          <div class="name">Elite Championship — Grand Finals</div>
+          <div class="meta"><span>🗓 28 Sept 2025</span><span>🏆 ₹10,00,000</span><span>👥 16 teams</span></div>
+          <p class="desc">Bo6 finals across Erangel, Miramar & Sanhok. Anti-cheat enabled.</p>
+          <div class="cta">
+            <button class="btn">Add to Calendar</button>
+            <button class="btn ghost">Register</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event Card 2 -->
+      <article class="card">
+        <div class="media">
+          <img th:src="@{/images/events/bgmi-scrims.png}" alt="Event">
+        </div>
+        <div class="body">
+          <div class="row">
+            <span class="pill">SCRIM</span>
+            <span class="pill">South Asia</span>
+          </div>
+          <div class="name">Pro Weekly Scrims</div>
+          <div class="meta"><span>🗓 Every Fri</span><span>🏆 Practice</span><span>👥 16 teams</span></div>
+          <p class="desc">Consistent scrims for rotations and synergy testing.</p>
+          <div class="cta">
+            <button class="btn">Add to Calendar</button>
+            <button class="btn ghost">Register</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event Card 3 -->
+      <article class="card">
+        <div class="media">
+          <img th:src="@{/images/events/bgmi-qualifier.webp}" alt="Event">
+        </div>
+        <div class="body">
+          <div class="row">
+            <span class="pill">QUALIFIER</span>
+            <span class="pill">India</span>
+          </div>
+          <div class="name">Open Qualifiers — Fall Split</div>
+          <div class="meta"><span>🗓 5 Oct 2025</span><span>🏆 Main Event Slots</span><span>👥 256 teams</span></div>
+          <p class="desc">Bracket qualifiers. POV recording required for all players.</p>
+          <div class="cta">
+            <button class="btn">Add to Calendar</button>
+            <button class="btn ghost">Register</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">© 2025 BGMI Competitive Hub • Static Frontend</footer>
+</body>
+</html>
