@@ -217,6 +217,4 @@ public class PlayerController
         System.out.println("Events page loaded");
         return "events";
     }
-    
-
 }
