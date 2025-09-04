@@ -15,4 +15,5 @@ public interface PlayerRepo extends JpaRepository<Player,Long>
     Optional<Player> findByEmail(String email);
     Optional<Player> findByPhoneNumber(String phoneNumber);
 
+
 }

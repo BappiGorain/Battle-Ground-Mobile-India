@@ -4,11 +4,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-
+import java.util.Optional;
 import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bgmi.entities.Player;
+import com.bgmi.service.JwtService;
 import com.bgmi.serviceImpl.PlayerServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +44,13 @@ public class PlayerController
     private PlayerServiceImpl playerServiceImpl;
 
     Logger logger = LoggerFactory.getLogger(PlayerController.class);
+
+    @Autowired
+    private JwtService jwtService;
+
+
+    @Autowired
+    private AuthenticationManager authManager;
 
      @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -82,20 +94,78 @@ public class PlayerController
     public String login()
     {
         return "login";
-    }   
+    }
+
+
+        @PostMapping("/process-login")
+        public String processLogin(@RequestParam("inputId") String inputId,
+                            @RequestParam("inputPassword") String inputPassword,
+                            Model model, HttpSession session) {
+        
+        logger.info("Processing login for: " + inputId);
+        
+        if (inputId == null || inputId.trim().isEmpty() || 
+            inputPassword == null || inputPassword.trim().isEmpty()) {
+            model.addAttribute("failedToLoginMessage", "Please enter both GameId and Password");
+            return "login";
+        }
+        
+        Optional<Player> optPlayer = this.playerServiceImpl.getOptionalPlayer(inputId);
+        
+        if (optPlayer.isPresent()) {
+            Player player = optPlayer.get();
+            
+            try {
+                // Authenticate using Spring Security
+                Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(inputId, inputPassword));
+                
+                if (authentication.isAuthenticated()) {
+                    String token = jwtService.generateToken(player.getGameId());
+                    
+                    // Store token for frontend use (optional)
+                    session.setAttribute("jwtToken", token);
+                    
+                    logger.info("Login successful for: " + inputId);
+                    return "redirect:/bgmi/player/profile/" + player.getGameId();
+                }
+            } catch (BadCredentialsException e) {
+                logger.error("Invalid credentials for: " + inputId);
+                model.addAttribute("failedToLoginMessage", "Invalid GameId or Password");
+                return "login";
+            } catch (Exception e) {
+                logger.error("Authentication error: " + e.getMessage());
+                model.addAttribute("failedToLoginMessage", "Authentication failed. Please try again.");
+                return "login";
+            }
+        } else {
+            logger.warn("Player not found: " + inputId);
+            model.addAttribute("failedToLoginMessage", "Player not found");
+            return "login";
+        }
+        
+        // This should never be reached, but just in case
+        model.addAttribute("failedToLoginMessage", "Authentication failed");
+        return "login";
+    }
+
     
     
 
     @GetMapping("/player/profile/{gameId}")
-    public String showProfile(@PathVariable String gameId, Model model) {
-        Player player = this.playerServiceImpl.getSinglePlayer(gameId);
-        model.addAttribute("player", player);
-        return "player/profile"; // profile.html
+    public String showProfile(@PathVariable String gameId, Model model)
+    {
+        Optional<Player> optPlayer = this.playerServiceImpl.getOptionalPlayer(gameId);
+        if (optPlayer.isPresent())
+        {
+            model.addAttribute("player", optPlayer.get()); // Extract the actual Player
+            return "player/profile";
+        } 
+        else 
+        {
+            return "redirect:/bgmi/login";
+        }
     }
-
-
-
-    
 
 
     @GetMapping("/all")
@@ -113,7 +183,8 @@ public class PlayerController
     @GetMapping("/update/{gameId}")
     public String editPlayer(@PathVariable("gameId") String gameId, Model model) {
         
-        Player player = playerServiceImpl.getSinglePlayer(gameId);
+        Player player = playerServiceImpl.getPlayer(gameId);
+        
         model.addAttribute("player", player);
         return "player/updatePlayer"; // updatePlayer.html
     }
@@ -195,11 +266,18 @@ public class PlayerController
     }
 
 
+
+    
+
+
     @GetMapping("/{gameId}")
     public String getSinglePlayer(@PathVariable("gameId") String gameId,HttpSession session,Model model)
     {
-        Player player = this.playerServiceImpl.getSinglePlayer(gameId);
-        model.addAttribute("player", player);
+        Optional<Player> optPlayer = this.playerServiceImpl.getOptionalPlayer(gameId);
+        if(optPlayer.isPresent())
+        {
+            Player player = optPlayer.get();
+            model.addAttribute("player", player);
 
         String roomId = (String)session.getAttribute("roomId");
         String roomPassword = (String)session.getAttribute("roomPassword");
@@ -210,7 +288,11 @@ public class PlayerController
         logger.info("your player is : " + player.getName());
 
         return "player/profile";
+        }
+        return "/login";    
     }
+
+
 
     @GetMapping("/events")
     public String upCommingEventsString() {

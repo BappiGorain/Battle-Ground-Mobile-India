@@ -1,5 +1,7 @@
 package com.bgmi.entities;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,11 +23,11 @@ import lombok.Setter;
 @Entity
 public class Player
 {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty(message = "Game ID is required")
+    
+    @Column(unique = true,nullable = false)
     private String gameId;
     @NotEmpty(message = "Name is required")
     private String name;
@@ -38,4 +40,5 @@ public class Player
     private String photoPath = "default_bgmi_avatar.png";
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
+    // private boolean isEnabled = false; 
 }

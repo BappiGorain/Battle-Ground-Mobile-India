@@ -2,8 +2,13 @@ package com.bgmi.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.bgmi.entities.Player;
 import com.bgmi.exceptions.ResourceNotFoundException;
@@ -16,6 +21,10 @@ public class PlayerServiceImpl implements PlayerService
 
     @Autowired
     private PlayerRepo playerRepo;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+
+    
     
     
     @Override
@@ -26,15 +35,15 @@ public class PlayerServiceImpl implements PlayerService
         return players;
     }
 
-    @Override
-    public Player getSinglePlayer(String gameId)
+    public Optional<Player> getOptionalPlayer(String gameId) 
     {
-        Player player = playerRepo.findByGameId(gameId).orElseThrow(()->new ResourceNotFoundException("Player","id",gameId));
-        return  player;
+        return playerRepo.findByGameId(gameId);
     }
 
+
     @Override
-    public Player updatePlayer(String gameId, Player player) {
+    public Player updatePlayer(String gameId, Player player)
+    {
         Player existingPlayer = playerRepo.findByGameId(gameId)
                 .orElseThrow(() -> new ResourceNotFoundException("Player", "gameId", gameId));
 
@@ -63,8 +72,9 @@ public class PlayerServiceImpl implements PlayerService
     @Override
     public Player addPlayer(Player player)
     {    
-        Player addedUser = playerRepo.save(player);
-        return addedUser;
+        player.setPassword(bCryptPasswordEncoder.encode(player.getPassword()));
+        return playerRepo.save(player);
+        
         
     }
 
@@ -80,7 +90,26 @@ public class PlayerServiceImpl implements PlayerService
     @Override
     public Player getPlayerByPhoneNumber(String phoneNumber)
     {
-        Player player = this.playerRepo.findByEmail(phoneNumber).orElseThrow(()->new ResourceNotFoundException("Player", "phone Number", phoneNumber));
+        Player player = this.playerRepo.findByPhoneNumber(phoneNumber).orElseThrow(()->new ResourceNotFoundException("Player", "phone Number", phoneNumber));
         return player;
     }
+
+    @Override
+    public Player getPlayer(String gameId)
+    {
+        Optional<Player> optionalPlayer = playerRepo.findByGameId(gameId);
+        if(optionalPlayer.isPresent())
+        {
+            return optionalPlayer.get();
+        }
+        else
+        {
+            return new Player();
+        }
+    }
+
+    
+    
+    
+    
 }

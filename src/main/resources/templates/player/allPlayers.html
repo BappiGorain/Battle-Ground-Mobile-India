@@ -346,17 +346,20 @@
                     <a th:href="@{/bgmi/profile}" class="text-white hover:text-purple-400 transition-colors">
                         <i class="ph-user text-xl"></i>
                     </a>
-                    <button class="text-white hover:text-purple-400 transition-colors">
-                        <i class="ph-bell text-xl"></i>
-                    </button>
-                    <button class="text-white hover:text-purple-400 transition-colors">
-                        <i class="ph-gear text-xl"></i>
-                    </button>
+                    
+
+                    <div class="flex flex-col gap-3">
+                        <a th:href="@{/chatbot}"
+                            class="gaming-btn px-6 py-3 rounded-xl text-white font-bold text-center text-decoration-none">
+                            <i class="ph-pencil-simple mr-2"></i>Chat with Online Players
+                        </a>
+                    </div>
+                    
                      <a th:href="@{/bgmi/id-password}"
                         class="gaming-btn px-4 py-2 rounded-lg text-white font-medium text-decoration-none">
                         <i class="ph-sign-out text-lg mr-2"></i>Create new Id Password
                     </a>
-                    <a th:href="@{/bgmi/login}"
+                    <a th:href="@{/logout}"
                         class="gaming-btn px-4 py-2 rounded-lg text-white font-medium text-decoration-none">
                         <i class="ph-sign-out text-lg mr-2"></i>Logout
                     </a>

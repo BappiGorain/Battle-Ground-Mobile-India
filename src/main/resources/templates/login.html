@@ -129,14 +129,22 @@
       <div class="sub">Access your battleground account</div>
     </header>
 
-    <form id="form" class="form" novalidate>
+    <div th:if="${failedToLoginMessage}" 
+      th:text="${failedToLoginMessage}" 
+      class="toast error show" 
+      style="position: relative; top: 0; right: 0; margin-bottom: 15px;">
+    </div>
+
+
+    <form th:action="@{/bgmi/process-login}" method="post"
+     id="form" class="form" novalidate>
       <div class="field">
         <label for="user" class="label">Username or Email</label>
         <div class="control">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.4 0-8 2.2-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.8-3.6-5-8-5Z"/>
           </svg>
-          <input id="user" name="username" class="input" placeholder="player@bgmi.com" autocomplete="username" required/>
+          <input id="user" name="inputId" class="input" placeholder="1234567890" autocomplete="username" required/>
         </div>
       </div>
 
@@ -146,7 +154,7 @@
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-6-2a3 3 0 0 1 6 0v2h-6V7Zm3 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/>
           </svg>
-          <input id="pass" name="password" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required/>
+          <input id="pass" name="inputPassword" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required/>
         </div>
       </div>
 
