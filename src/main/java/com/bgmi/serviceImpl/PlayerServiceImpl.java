@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.bgmi.entities.Player;
 import com.bgmi.exceptions.ResourceNotFoundException;
@@ -22,8 +19,8 @@ public class PlayerServiceImpl implements PlayerService
     @Autowired
     private PlayerRepo playerRepo;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
-
+    @Autowired  // ✅ Use PasswordEncoder interface
+    private PasswordEncoder passwordEncoder;
     
     
     
@@ -72,7 +69,7 @@ public class PlayerServiceImpl implements PlayerService
     @Override
     public Player addPlayer(Player player)
     {    
-        player.setPassword(bCryptPasswordEncoder.encode(player.getPassword()));
+        player.setPassword(passwordEncoder.encode(player.getPassword()));
         return playerRepo.save(player);
         
         

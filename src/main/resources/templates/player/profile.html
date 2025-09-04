@@ -477,7 +477,7 @@
                 <!-- Profile Avatar -->
                 <div class="relative floating">
                     <div class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 p-1">
-                        <img th:src="${player.photoPath != null and !player.photoPath.isEmpty() and !player.photoPath.equals('default_bgmi_avatar.png')} ? @{${player.photoPath}} : @{/images/default_bgmi_avatar.jpeg}"
+                        <img th:src="${player.photoPath != null and !player.photoPath.isEmpty() and !player.photoPath.equals('default_bgmi_avatar.png')} ? @{${player.photoPath}} : @{/images/default_bgmi_avatar.png}"
                             alt="Player Avatar" class="w-full h-full rounded-full object-cover bg-gray-800" />
                     </div>
                     <div class="absolute -bottom-2 -right-2">

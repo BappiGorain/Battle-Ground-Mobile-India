@@ -56,14 +56,10 @@ public class JwtService
     }
 
 
-    private SecretKey getKey() {
+    private SecretKey getKey() 
+    {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
-        
-    
         return Keys.hmacShaKeyFor(keyBytes);
-        
-        
-        
     }
 
 

@@ -20,47 +20,44 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter
-{
+public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
 
     @Autowired
-    private ApplicationContext  context;
+    private ApplicationContext context;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        // CRITICAL FIX: Skip ALL /bgmi/ routes
+        return path.startsWith("/bgmi/");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
-                // Bearer "Token........"
 
-                String authheader = request.getHeader("Authorization");
-                String token = null;
-                String username = null;
-              
-                if(authheader != null && authheader.startsWith("Bearer "))
-                {
-                    token = authheader.substring(7);
-                    username = jwtService.extractUserName(token);
+        String authheader = request.getHeader("Authorization");
+        String token = null;
+        String username = null;
+
+        if (authheader != null && authheader.startsWith("Bearer ")) {
+            token = authheader.substring(7);
+            username = jwtService.extractUserName(token);
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
+            }
+        }
 
-
-                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null)
-                {
-                    UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
-                    
-                    if(jwtService.validateToken(token,userDetails))
-                    {
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
-                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
-                    
-                }
-                
-                filterChain.doFilter(request, response);
-
+        filterChain.doFilter(request, response);
     }
-
 }
